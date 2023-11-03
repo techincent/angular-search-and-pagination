@@ -1,0 +1,42 @@
+<section class="product_area">
+  <div style="max-width: 1200px;margin: 50px auto;">
+    <div style="max-width: 300px;margin: 50px auto;">   
+      <label for="default-search">Search: </label>
+      <input [formControl]="searchControl" type="search" id="default-search" placeholder="Search title, description...">
+    </div>
+
+    <!-- Products -->
+    <div *ngIf="!isLoaded && isLoading;else productContainerTemplate">
+      Loading ...
+    </div>
+  </div>
+  
+  <ng-template #productContainerTemplate>
+    <div style="display: grid;grid-template-columns: repeat(3, minmax(0, 1fr));gap: 16px;">
+      <div *ngFor="let product of products" style="border: 1px solid gray; border-radius: 4px; padding: 1rem;">
+        <div class="p-5">
+            <a [routerLink]="['/products', product.slug]">
+              <h3 style="margin-top: 0;">{{product.title}}</h3>
+            </a>
+            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+            <a [routerLink]="['/products', product.slug]" style="display: inline-flex;align-items: center; gap: 12px;">
+                Read more
+                <svg style="width: 15px;height: 15px;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                </svg>
+            </a>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" style="display: flex;justify-content: center;margin-top: 20px;">
+      Loading more...
+    </div>
+
+    <nav style="display: flex;align-items: center;justify-content: center;margin-top: 1rem;gap: 10px;">
+      <button style="cursor: pointer;" [disabled]="queryParams.page === 1" (click)="setPage((queryParams.page || 1) - 1)" type="button">Prev</button>
+      <button type="button">{{queryParams.page}}</button>
+      <button style="cursor: pointer;" [disabled]="isLastPage" (click)="setPage((queryParams.page || 1) + 1)" type="button">Next</button>
+    </nav>
+  </ng-template>
+</section>
